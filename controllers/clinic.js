@@ -1,21 +1,28 @@
 const Clinic = require("../models/clinic");
+const { validationResult } = require("express-validator");
 
 exports.getClinics = (req, res, next) => {
-  res.status(200).json({
-    clinics: [
-      {
-        _id: "1",
-        title: "numero uno",
-        imageUri: "asd",
-        address: "asdasd",
-        lat: "asd",
-        lng: "asda",
-      },
-    ],
-  });
+  Clinic.find()
+    .then((clinics) => {
+      res
+        .status(200)
+        .json({ message: "Pobrano przychodnie", clinics: clinics });
+    })
+    .catch((err) => {
+      if (!err.statusCode) {
+        err.statusCode = 500;
+      }
+      next(err);
+    });
 };
 
 exports.createClinic = (req, res, next) => {
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    const error = new Error("Validation failed, entered data is incorrect");
+    error.statusCode = 422;
+    throw error;
+  }
   const title = req.body.title;
   const imageUri = req.body.imageUri;
   const address = req.body.address;
@@ -36,5 +43,10 @@ exports.createClinic = (req, res, next) => {
         clinic: result,
       });
     })
-    .catch((err) => console.log(err));
+    .catch((err) => {
+      if (!err.statusCode) {
+        err.statusCode = 500;
+      }
+      next(err);
+    });
 };

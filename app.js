@@ -1,8 +1,10 @@
 const express = require("express");
 const bodyParser = require("body-parser");
 const mongoose = require("mongoose");
+const path = require("path");
 
 const clinicRoutes = require("./routes/clinic");
+const authRoutes = require("./routes/auth");
 
 const app = express();
 
@@ -18,12 +20,22 @@ app.use((req, res, next) => {
   next();
 });
 
+app.use("/clinicImages", express.static(path.join(__dirname, "clinicImages")));
+
 app.use("/clinicFeed", clinicRoutes);
+app.use("/auth", authRoutes);
+
+app.use((error, req, res, next) => {
+  console.log(error);
+  const status = error.statusCode || 500;
+  const message = error.message;
+  const data = error.data;
+  res.status(status).json({ message: message, data: data });
+});
 
 mongoose
   .connect(
-    `mongodb+srv://jumper1022:vL8d62l9DqL24ae8@cluster0-xkyz5.mongodb.net/easyMed?retryWrites=true&w=majority
-`,
+    `mongodb+srv://jumper1022:vL8d62l9DqL24ae8@cluster0-xkyz5.mongodb.net/easyMed?retryWrites=true&w=majority`,
     { useUnifiedTopology: true, useNewUrlParser: true, useCreateIndex: true }
   )
   .then((result) => {
