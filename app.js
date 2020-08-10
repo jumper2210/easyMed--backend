@@ -1,3 +1,4 @@
+const ENV = require("./env.js");
 const express = require("express");
 const bodyParser = require("body-parser");
 const mongoose = require("mongoose");
@@ -5,6 +6,7 @@ const path = require("path");
 
 const clinicRoutes = require("./routes/clinic");
 const authRoutes = require("./routes/auth");
+const medicalCaseRoutes = require("./routes/medicalCase");
 
 const app = express();
 
@@ -23,7 +25,10 @@ app.use((req, res, next) => {
 app.use("/clinicImages", express.static(path.join(__dirname, "clinicImages")));
 
 app.use("/clinicFeed", clinicRoutes);
+
 app.use("/auth", authRoutes);
+
+app.use("/medicalCase", medicalCaseRoutes);
 
 app.use((error, req, res, next) => {
   console.log(error);
@@ -34,10 +39,11 @@ app.use((error, req, res, next) => {
 });
 
 mongoose
-  .connect(
-    `mongodb+srv://jumper1022:vL8d62l9DqL24ae8@cluster0-xkyz5.mongodb.net/easyMed?retryWrites=true&w=majority`,
-    { useUnifiedTopology: true, useNewUrlParser: true, useCreateIndex: true }
-  )
+  .connect(ENV.mongoKey, {
+    useUnifiedTopology: true,
+    useNewUrlParser: true,
+    useCreateIndex: true,
+  })
   .then((result) => {
     app.listen(8080);
   })

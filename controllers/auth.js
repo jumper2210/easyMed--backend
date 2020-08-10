@@ -2,8 +2,13 @@ const { validationResult } = require("express-validator");
 const User = require("../models/user");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
+const ENV = require("../env");
+
+const expireTime = 3600000;
+
 exports.signup = (req, res, next) => {
   const errors = validationResult(req);
+
   if (!errors.isEmpty()) {
     const error = new Error("Validation failed");
     error.statusCode = 422;
@@ -40,6 +45,7 @@ exports.login = (req, res, next) => {
   const password = req.body.password;
   const name = req.body.name;
   let loadedUser;
+
   User.findOne({ email: email })
     .then((user) => {
       if (!user) {
@@ -61,10 +67,16 @@ exports.login = (req, res, next) => {
           email: loadedUser.email,
           userId: loadedUser._id.toString(),
         },
-        "somejumpersecret",
-        { expiresIn: "1h" }
+        ENV.tokenSecret,
+        { expiresIn: expireTime }
       );
-      res.status(200).json({ token: token, userId: loadedUser._id.toString() });
+
+      res.status(200).json({
+        token: token,
+        userId: loadedUser._id.toString(),
+        name: name,
+        expireTime,
+      });
     })
     .catch((err) => {
       if (!err.statusCode) {

@@ -18,8 +18,14 @@ const userSchema = new Schema(
     },
     status: {
       type: String,
-      default: "new User",
+      default: "new User added!",
     },
+    medicalCases: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: "MedicalCase",
+      },
+    ],
   },
   { timestamps: true }
 );
