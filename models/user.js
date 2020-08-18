@@ -26,6 +26,12 @@ const userSchema = new Schema(
         ref: "MedicalCase",
       },
     ],
+    chatGroups: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: "ChatGroup",
+      },
+    ],
   },
   { timestamps: true }
 );

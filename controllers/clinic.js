@@ -4,9 +4,7 @@ const { validationResult } = require("express-validator");
 exports.getClinics = (req, res, next) => {
   Clinic.find()
     .then((clinics) => {
-      res
-        .status(200)
-        .json({ message: "Pobrano przychodnie", clinics: clinics });
+      res.status(200).json({ message: "Fetched clinic", clinics: clinics });
     })
     .catch((err) => {
       if (!err.statusCode) {

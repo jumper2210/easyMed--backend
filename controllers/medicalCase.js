@@ -41,6 +41,7 @@ exports.createMedicalCase = (req, res, next) => {
     })
     .then((user) => {
       creator = user;
+      console.log(user);
       user.medicalCases.push(medicalCase);
       return user.save();
     })

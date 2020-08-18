@@ -3,12 +3,13 @@ const express = require("express");
 const bodyParser = require("body-parser");
 const mongoose = require("mongoose");
 const path = require("path");
+const app = express();
 
 const clinicRoutes = require("./routes/clinic");
 const authRoutes = require("./routes/auth");
 const medicalCaseRoutes = require("./routes/medicalCase");
-
-const app = express();
+const messageRoutes = require("./routes/message");
+const chatGroupRoutes = require("./routes/chatGroup");
 
 app.use(bodyParser.json());
 
@@ -30,6 +31,9 @@ app.use("/auth", authRoutes);
 
 app.use("/medicalCase", medicalCaseRoutes);
 
+app.use("/chatGroup", chatGroupRoutes);
+
+app.use("/message", messageRoutes);
 app.use((error, req, res, next) => {
   console.log(error);
   const status = error.statusCode || 500;
@@ -45,6 +49,10 @@ mongoose
     useCreateIndex: true,
   })
   .then((result) => {
-    app.listen(8080);
+    const server = app.listen(8080);
+    const io = require("./socket").init(server);
+    io.on("connection", (socket) => {
+      console.log("User connected");
+    });
   })
   .catch((err) => console.log(err));
