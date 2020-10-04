@@ -13,10 +13,6 @@ const chatGroupSchema = new Schema({
     ref: "User",
     required: true,
   },
-  messages: {
-    type: Schema.Types.ObjectId,
-    ref: "Message",
-  },
 });
 
 module.exports = mongoose.model("ChatGroup", chatGroupSchema);

@@ -32,6 +32,12 @@ const userSchema = new Schema(
         ref: "ChatGroup",
       },
     ],
+    messages: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: "Messages",
+      },
+    ],
   },
   { timestamps: true }
 );

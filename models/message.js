@@ -17,7 +17,7 @@ const messageSchema = new Schema({
   },
   creator: {
     type: Schema.Types.ObjectId,
-    ref: "ChatGroup",
+    ref: "User",
     required: true,
   },
 });

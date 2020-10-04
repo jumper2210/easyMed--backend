@@ -1,6 +1,7 @@
 const MedicalCase = require("../models/medicalCase");
 const { validationResult } = require("express-validator");
 const User = require("../models/user.js");
+
 exports.createMedicalCase = (req, res, next) => {
   const errors = validationResult(req);
 
@@ -41,7 +42,6 @@ exports.createMedicalCase = (req, res, next) => {
     })
     .then((user) => {
       creator = user;
-      console.log(user);
       user.medicalCases.push(medicalCase);
       return user.save();
     })
