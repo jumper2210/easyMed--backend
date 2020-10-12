@@ -34,7 +34,6 @@ exports.createMedicalCase = (req, res, next) => {
     imageUri: imageUri,
     creator: req.userId,
   });
-
   medicalCase
     .save()
     .then((result) => {

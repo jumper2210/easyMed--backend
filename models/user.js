@@ -16,26 +16,22 @@ const userSchema = new Schema(
       type: String,
       required: true,
     },
-    status: {
-      type: String,
-      default: "new User added!",
-    },
+    doctors: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: "User",
+      },
+    ],
     medicalCases: [
       {
         type: Schema.Types.ObjectId,
         ref: "MedicalCase",
       },
     ],
-    chatGroups: [
+    conversations: [
       {
         type: Schema.Types.ObjectId,
-        ref: "ChatGroup",
-      },
-    ],
-    messages: [
-      {
-        type: Schema.Types.ObjectId,
-        ref: "Messages",
+        ref: "Conversation",
       },
     ],
   },

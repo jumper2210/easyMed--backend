@@ -5,26 +5,26 @@ const path = require("path");
 const clinicRoutes = require("./routes/clinic");
 const authRoutes = require("./routes/auth");
 const medicalCaseRoutes = require("./routes/medicalCase");
-const chatGroupRoutes = require("./routes/chatGroup");
-
+const conversationRoutes = require("./routes/conversation");
+const doctorsRoutes = require("./routes/doctors");
+const messageRoutes = require("./routes/message");
 const ENV = require("./env.js");
 const PORT = 8080;
 const app = express();
 const socket = require("socket.io");
+const handlers = require("./messagesHandlers/createMessage");
 
 app.use(bodyParser.json());
 
-// @ts-ignore
 app.use((req, res, next) => {
   res.setHeader("Access-Control-Allow-Origin", "*");
   res.setHeader(
     "Access-Control-Allow-Methods",
     "OPTIONS, GET, POST, PUT, PATCH, DELETE"
   );
-  res.setHeader("Access-Control-Allow-Headers", "Content-Type, ");
+  res.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization");
   next();
 });
-
 app.use("/clinicImages", express.static(path.join(__dirname, "clinicImages")));
 
 app.use("/clinicFeed", clinicRoutes);
@@ -33,7 +33,11 @@ app.use("/auth", authRoutes);
 
 app.use("/medicalCase", medicalCaseRoutes);
 
-app.use("/chatGroup", chatGroupRoutes);
+app.use("/conversation", conversationRoutes);
+
+app.use("/message", messageRoutes);
+
+app.use("/doctors", doctorsRoutes);
 
 app.use((error, req, res, next) => {
   console.log(error);
@@ -45,56 +49,25 @@ app.use((error, req, res, next) => {
 
 const server = app.listen(PORT);
 const io = socket(server);
-
-const users = {};
-
-function createUsersOnline() {
-  const values = Object.values(users);
-  const onlyWithUsernames = values.filter((u) => u.userName !== undefined);
-  return onlyWithUsernames;
-}
-
-function createUserAvatarUrl() {
-  const rand1 = Math.round(Math.random() * 200 + 100);
-  const rand2 = Math.round(Math.random() * 200 + 100);
-  return `https://placeimg.com/${rand1}/${rand2}/any`;
-}
+const sockets = {};
 
 io.on("connection", (socket) => {
-  socket.on("disconnect", () => {
-    delete users[socket.id];
-    io.emit("action", { type: "users_online", data: createUsersOnline() });
+  socket.on("init", (userId) => {
+    sockets[userId.senderId] = socket;
   });
-  socket.on("action", (action) => {
-    switch (action.type) {
-      case "server/join":
-        users[socket.id] = { userId: action.data.userId };
-        users[socket.id].userName = action.data.userName;
-        users[socket.id].groupId = action.data.groupId;
-        users[socket.id].avatar = createUserAvatarUrl();
-
-        io.emit("action", {
-          type: "users_online",
-          data: createUsersOnline(),
-        });
-        break;
-      case "server/private_message":
-        const conversationId = action.data.conversationId;
-        if (users[socket.id].groupId === conversationId) {
-          io.emit("action", {
-            type: "private_message",
-            data: {
-              conversationId: conversationId,
-            },
-          });
-          break;
-        }
+  socket.on("message", (message) => {
+    if (sockets[message.receiverId]) {
+      sockets[message.receiverId].emit("message", message);
     }
+    handlers.createMessage(message);
+  });
+  socket.on("disconnect", (userId) => {
+    delete sockets[userId.senderId];
   });
 });
 
 mongoose
-  .connect(ENV.mongoKey, {
+  .connect(ENV.keys.mongoKey, {
     useUnifiedTopology: true,
     useNewUrlParser: true,
     useCreateIndex: true,

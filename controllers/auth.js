@@ -37,7 +37,7 @@ exports.signup = (req, res, next) => {
           email: result.email,
           userId: result._id.toString(),
         },
-        ENV.tokenSecret,
+        ENV.keys.tokenSecret,
         { expiresIn: expireTime }
       );
 
@@ -81,7 +81,7 @@ exports.login = async (req, res, next) => {
         email: loadedUser.getMaxListeners,
         userId: loadedUser._id.toString(),
       },
-      ENV.tokenSecret,
+      ENV.keys.tokenSecret,
       { expiresIn: "1h" }
     );
     res.status(200).json({
@@ -97,8 +97,4 @@ exports.login = async (req, res, next) => {
     }
     next(err);
   }
-};
-
-exports.getUser = (req, res, next) => {
-  User.find().then;
 };

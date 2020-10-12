@@ -6,8 +6,6 @@ const authController = require("../controllers/auth");
 
 const User = require("../models/user");
 
-const isAuth = require("../middleware/is-auth");
-
 const router = express.Router();
 
 router.post(
@@ -31,7 +29,5 @@ router.post(
 );
 
 router.post("/login", authController.login);
-
-router.get("/getUser", isAuth, authController.getUser);
 
 module.exports = router;
