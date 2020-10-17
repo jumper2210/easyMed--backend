@@ -34,6 +34,9 @@ const userSchema = new Schema(
         ref: "Conversation",
       },
     ],
+    avatar: {
+      type: String,
+    },
   },
   { timestamps: true }
 );

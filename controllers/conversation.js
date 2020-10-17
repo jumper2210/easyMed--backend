@@ -29,9 +29,13 @@ exports.createConversation = async (req, res, next) => {
             });
           });
         }
-      } else {
-        console.log("Cannot find user");
       }
+    })
+    .catch((err) => {
+      if (!err.statusCode) {
+        err.statusCode = 500;
+      }
+      next(err);
     });
 };
 exports.loadConversations = async (req, res, next) => {
@@ -50,8 +54,12 @@ exports.loadConversations = async (req, res, next) => {
           };
         });
         res.status(201).json(conversations);
-      } else {
-        console.log("Cannot find user");
       }
+    })
+    .catch((err) => {
+      if (!err.statusCode) {
+        err.statusCode = 500;
+      }
+      next(err);
     });
 };

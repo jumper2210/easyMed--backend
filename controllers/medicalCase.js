@@ -59,3 +59,21 @@ exports.createMedicalCase = (req, res, next) => {
       next(err);
     });
 };
+
+exports.getUserMedicalCases = async (req, res, next) => {
+  const userId = req.userId;
+  await User.findOne({ _id: userId })
+    .populate("medicalCases")
+    .then((user) => {
+      if (user) {
+        const medicalCases = user.medicalCases;
+        res.status(200).json({ medicalCases });
+      }
+    })
+    .catch((err) => {
+      if (!err.statusCode) {
+        err.statusCode = 500;
+      }
+      next(err);
+    });
+};

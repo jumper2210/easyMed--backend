@@ -42,7 +42,6 @@ exports.signup = (req, res, next) => {
       );
 
       res.status(201).json({
-        message: "User Created",
         userId: result._id,
         token: token,
         expireTime: expireTime,
@@ -89,7 +88,6 @@ exports.login = async (req, res, next) => {
       userId: loadedUser._id.toString(),
       name: name,
       expireTime,
-      user: loadedUser,
     });
   } catch (err) {
     if (!err.statusCode) {

@@ -8,12 +8,12 @@ const medicalCaseRoutes = require("./routes/medicalCase");
 const conversationRoutes = require("./routes/conversation");
 const doctorsRoutes = require("./routes/doctors");
 const messageRoutes = require("./routes/message");
+const handlers = require("./messagesHandlers/createMessage");
+const userRoutes = require("./routes/user");
 const ENV = require("./env.js");
 const PORT = 8080;
 const app = express();
 const socket = require("socket.io");
-const handlers = require("./messagesHandlers/createMessage");
-
 app.use(bodyParser.json());
 
 app.use((req, res, next) => {
@@ -38,6 +38,8 @@ app.use("/conversation", conversationRoutes);
 app.use("/message", messageRoutes);
 
 app.use("/doctors", doctorsRoutes);
+
+app.use("/user", userRoutes);
 
 app.use((error, req, res, next) => {
   console.log(error);

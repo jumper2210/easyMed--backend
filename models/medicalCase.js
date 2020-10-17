@@ -39,6 +39,10 @@ const medicalCaseSchema = new Schema(
       ref: "User",
       required: true,
     },
+    resolved: {
+      type: Boolean,
+      default: false,
+    },
   },
 
   { timestamps: true }
