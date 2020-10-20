@@ -6,9 +6,12 @@ exports.loadMessages = async (req, res, next) => {
     .then((conversation) => {
       if (conversation) {
         res.json({ id: conversation._id, messages: conversation.messages });
-      } else {
-        console.log("Cannot find conversations");
       }
     })
-    .catch((err) => console.log(err));
+    .catch((err) => {
+      if (!err.statusCode) {
+        err.statusCode = 500;
+      }
+      next(err);
+    });
 };

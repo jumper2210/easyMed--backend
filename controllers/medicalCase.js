@@ -61,8 +61,8 @@ exports.createMedicalCase = (req, res, next) => {
 };
 
 exports.getUserMedicalCases = async (req, res, next) => {
-  const userId = req.userId;
-  await User.findOne({ _id: userId })
+  const patientId = req.params.patientId;
+  await User.findOne({ _id: patientId })
     .populate("medicalCases")
     .then((user) => {
       if (user) {

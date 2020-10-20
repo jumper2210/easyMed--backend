@@ -16,7 +16,7 @@ const userSchema = new Schema(
       type: String,
       required: true,
     },
-    doctors: [
+    chatMates: [
       {
         type: Schema.Types.ObjectId,
         ref: "User",
@@ -35,6 +35,9 @@ const userSchema = new Schema(
       },
     ],
     avatar: {
+      type: String,
+    },
+    phoneNumber: {
       type: String,
     },
   },

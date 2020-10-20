@@ -9,23 +9,23 @@ exports.createConversation = async (req, res, next) => {
         const isConversationExist =
           user.conversations.filter(
             (conversation) =>
-              conversation.userOneId === req.body.doctorId ||
-              conversation.userTwoId === req.body.doctorId
+              conversation.userOneId === req.body.chatMateId ||
+              conversation.userTwoId === req.body.chatMateId
           ).length > 0;
         if (isConversationExist) {
           console.log("You already have conversation with this user");
         } else {
-          User.findById(req.body.doctorId).then((doctor) => {
+          User.findById(req.body.chatMateId).then((chatMate) => {
             const newConversation = new Conversation({
               userOneId: user._id,
-              userTwoId: doctor._id,
+              userTwoId: chatMate._id,
             });
             newConversation.save().then((conversation) => {
               user.conversations.push(conversation);
               user.save();
-              doctor.conversations.push(conversation);
-              doctor.save();
-              res.json({ id: conversation._id, doctorId: doctor._id });
+              chatMate.conversations.push(conversation);
+              chatMate.save();
+              res.json({ id: conversation._id, chatMateId: chatMate._id });
             });
           });
         }
@@ -44,13 +44,13 @@ exports.loadConversations = async (req, res, next) => {
     .then((user) => {
       if (user) {
         const conversations = user.conversations.map((conversation) => {
-          const doctorId =
+          const chatMateId =
             `${user._id}` === conversation.userOneId
               ? conversation.userTwoId
               : conversation.userOneId;
           return {
             id: conversation._id,
-            doctorId,
+            chatMateId,
           };
         });
         res.status(201).json(conversations);

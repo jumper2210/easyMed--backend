@@ -10,8 +10,7 @@ router.post(
 );
 
 router.get(
-  "/getUserMedicalCases",
-  isAuth,
+  "/getUserMedicalCases/:patientId",
   medicalCaseController.getUserMedicalCases
 );
 
