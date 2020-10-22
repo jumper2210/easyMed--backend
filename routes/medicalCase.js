@@ -10,8 +10,13 @@ router.post(
 );
 
 router.get(
-  "/getUserMedicalCases/:patientId",
-  medicalCaseController.getUserMedicalCases
+  "/getPatientMedicalCases/:patientId",
+  medicalCaseController.getPatientMedicalCases
+);
+
+router.put(
+  "/checkPatientMedicalCase/:medicalCaseId",
+  medicalCaseController.checkPatientMedicalCase
 );
 
 module.exports = router;

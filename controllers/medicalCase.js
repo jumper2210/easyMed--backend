@@ -60,7 +60,7 @@ exports.createMedicalCase = (req, res, next) => {
     });
 };
 
-exports.getUserMedicalCases = async (req, res, next) => {
+exports.getPatientMedicalCases = async (req, res, next) => {
   const patientId = req.params.patientId;
   await User.findOne({ _id: patientId })
     .populate("medicalCases")
@@ -68,6 +68,24 @@ exports.getUserMedicalCases = async (req, res, next) => {
       if (user) {
         const medicalCases = user.medicalCases;
         res.status(200).json({ medicalCases });
+      }
+    })
+    .catch((err) => {
+      if (!err.statusCode) {
+        err.statusCode = 500;
+      }
+      next(err);
+    });
+};
+
+exports.checkPatientMedicalCase = async (req, res, next) => {
+  const medicalCaseId = req.params.medicalCaseId;
+  await MedicalCase.findOne({ _id: medicalCaseId })
+    .then((medicalCase) => {
+      if (medicalCase) {
+        medicalCase.resolved = true;
+        medicalCase.save();
+        res.status(200).json({ message: "medical case checked!", medicalCase });
       }
     })
     .catch((err) => {
