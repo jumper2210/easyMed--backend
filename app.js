@@ -10,10 +10,12 @@ const chatMatesRoutes = require("./routes/chatMates");
 const messageRoutes = require("./routes/message");
 const handlers = require("./messagesHandlers/createMessage");
 const userRoutes = require("./routes/user");
+const medicineRoute = require("./routes/medicine");
 const ENV = require("./env.js");
 const PORT = 8080;
 const app = express();
 const socket = require("socket.io");
+
 app.use(bodyParser.json());
 
 app.use((req, res, next) => {
@@ -40,6 +42,8 @@ app.use("/message", messageRoutes);
 app.use("/chatMates", chatMatesRoutes);
 
 app.use("/user", userRoutes);
+
+app.use("/medicine", medicineRoute);
 
 app.use((error, req, res, next) => {
   console.log(error);

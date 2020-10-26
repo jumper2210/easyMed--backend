@@ -34,6 +34,13 @@ const userSchema = new Schema(
         ref: "Conversation",
       },
     ],
+    medicines: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: "Medicine",
+        required: true,
+      },
+    ],
     avatar: {
       type: String,
     },
