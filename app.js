@@ -11,10 +11,14 @@ const messageRoutes = require("./routes/message");
 const handlers = require("./messagesHandlers/createMessage");
 const userRoutes = require("./routes/user");
 const medicineRoute = require("./routes/medicine");
+const pushNotificationsRoutes = require("./routes/pushNotifications");
 const ENV = require("./env.js");
 const PORT = 8080;
 const app = express();
 const socket = require("socket.io");
+const server = app.listen(PORT);
+const io = socket(server);
+const sockets = {};
 
 app.use(bodyParser.json());
 
@@ -27,7 +31,6 @@ app.use((req, res, next) => {
   res.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization");
   next();
 });
-app.use("/clinicImages", express.static(path.join(__dirname, "clinicImages")));
 
 app.use("/clinicFeed", clinicRoutes);
 
@@ -45,6 +48,8 @@ app.use("/user", userRoutes);
 
 app.use("/medicine", medicineRoute);
 
+app.use("/pushNotifications", pushNotificationsRoutes);
+
 app.use((error, req, res, next) => {
   console.log(error);
   const status = error.statusCode || 500;
@@ -52,10 +57,6 @@ app.use((error, req, res, next) => {
   const data = error.data;
   res.status(status).json({ message: message, data: data });
 });
-
-const server = app.listen(PORT);
-const io = socket(server);
-const sockets = {};
 
 io.on("connection", (socket) => {
   socket.on("init", (userId) => {

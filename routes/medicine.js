@@ -1,5 +1,3 @@
-const { request } = require("express");
-
 const express = require("express");
 
 const medicineController = require("../controllers/medicine");
@@ -18,5 +16,7 @@ router.get(
   "/loadPatientMedicines/:patientId",
   medicineController.loadPatientMedicines
 );
+
+router.delete("/deleteMedicine/:medicineId", medicineController.deleteMedicine);
 
 module.exports = router;

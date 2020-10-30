@@ -43,17 +43,17 @@ exports.editUser = async (req, res, next) => {
     throw error;
   }
   const name = req.body.name;
-  const avatar = req.body.avatar;
-
+  const avatar = req.body.selectedImage;
+  const phoneNumber = req.body.phoneNumber;
   try {
     const user = await User.findOne({ _id: userId });
     if (!user) {
       errors.statusCode = 404;
       throw new Error("user could not be found");
     }
-    console.log(user + "test user edit");
     user.name = name;
     user.avatar = avatar;
+    user.phoneNumber = phoneNumber;
     res.status(200).json({
       user: user,
     });

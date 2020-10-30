@@ -1,8 +1,6 @@
 const User = require("../models/user");
 const Medicine = require("../models/medicine");
 const { validationResult } = require("express-validator");
-const { findById } = require("../models/user");
-const medicine = require("../models/medicine");
 
 exports.assignMedicine = async (req, res, next) => {
   const errors = validationResult(req);
@@ -50,7 +48,7 @@ exports.loadPatientMedicines = async (req, res, next) => {
       "medicines"
     );
     const medicines = patient.medicines;
-    res.status(201).json(medicines);
+    res.status(201).json({ medicines: medicines });
   } catch (error) {
     if (!error.statusCode) {
       error.statusCode = 500;
@@ -58,3 +56,18 @@ exports.loadPatientMedicines = async (req, res, next) => {
     next(error);
   }
 };
+
+exports.deleteMedicine = async (req, res, next) => {
+  const medicineId = req.params.medicineId;
+  try {
+    await Medicine.findByIdAndRemove(medicineId);
+
+    res.status(200).json({ message: "Deleted medicine." });
+  } catch (error) {
+    if (!error.statusCode) {
+      error.statusCode = 500;
+    }
+    next(error);
+  }
+};
+

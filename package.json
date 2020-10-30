@@ -13,6 +13,7 @@
     "bcryptjs": "^2.4.3",
     "body-parser": "^1.19.0",
     "boom": "^7.3.0",
+    "expo-server-sdk": "^3.6.0",
     "express": "^4.17.1",
     "express-validator": "^6.5.0",
     "hapi": "^18.1.0",
