@@ -46,6 +46,11 @@ const userSchema = new Schema(
     phoneNumber: {
       type: String,
     },
+    role: {
+      type: String,
+      default: "PATIENT",
+      required: true,
+    },
   },
   { timestamps: true }
 );

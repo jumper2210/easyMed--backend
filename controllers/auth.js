@@ -36,6 +36,7 @@ exports.signup = (req, res, next) => {
         {
           email: result.email,
           userId: result._id.toString(),
+          role: result.role,
         },
         ENV.keys.tokenSecret,
         { expiresIn: expireTime }
@@ -79,6 +80,7 @@ exports.login = async (req, res, next) => {
       {
         email: loadedUser.getMaxListeners,
         userId: loadedUser._id.toString(),
+        role: loadedUser.role,
       },
       ENV.keys.tokenSecret,
       { expiresIn: "1h" }
