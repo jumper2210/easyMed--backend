@@ -6,9 +6,6 @@ const userController = require("../controllers/user");
 
 const isAuth = require("../middleware/is-auth");
 
-const { ROLES } = require("../helpers/_roles");
-const { authRole } = require("../helpers/_authRole");
-
 router.get("/getUser", isAuth, userController.getUser);
 
 router.put(
@@ -17,10 +14,5 @@ router.put(
   [body("name").trim().isLength({ min: 5 })],
   userController.editUser
 );
-router.get(
-  "/getAllUsers",
-  isAuth,
-  authRole(ROLES.DOCTOR),
-  userController.getAllUsers
-);
+router.get("/getAllUsers", isAuth, userController.getAllUsers);
 module.exports = router;
