@@ -1,20 +1,60 @@
-const User = require("../models/user")
+const { validationResult } = require('express-validator')
+const Doctor = require('../models/doctor')
+const bcrypt = require('bcryptjs')
+const jwt = require('jsonwebtoken')
+const ENV = require('../env.js')
 
-exports.setDoctorRole = async (req, res, next) => {
-  try {
-    const userId = req.params.userId
-    const user = await User.findById(userId)
-    if (!user) {
-      const error = new Error("User with this id can't be found")
-      error.statusCode = 404
-      throw error
-    }
-    user.role = "DOCTOR"
-    return user.save()
-  } catch (err) {
-    if (!err.statusCode) {
-      err.statusCode = 200
-    }
-    next(err)
+exports.assignDoctor = (req, res, next) => {
+  const errors = validationResult(req)
+
+  if (!errors.isEmpty()) {
+    const error = new Error('Validation failed')
+    error.statusCode = 422
+    error.data = errors.array()
+    throw error
   }
+
+  const email = req.body.email
+  const name = req.body.name
+  const password = req.body.password
+  const specialization = req.body.specialization
+
+  bcrypt
+    .hash(password, 12)
+    .then((hashedPw) => {
+      const doctor = new Doctor({
+        email: email,
+        password: hashedPw,
+        name: name,
+        specialization: specialization,
+      })
+      return doctor.save()
+    })
+
+    .then((result) => {
+      const token = jwt.sign(
+        {
+          email: result.email,
+          userId: result._id.toString(),
+          role: result.role,
+          isAssignClinic: true,
+        },
+        ENV.keys.tokenSecret,
+        { expiresIn: expireTime }
+      )
+
+      res.status(201).json({
+        userId: result._id,
+        token: token,
+        expireTime: expireTime,
+        role: result.role,
+        isAssignClinic: true,
+      })
+    })
+    .catch((err) => {
+      if (!err.statusCode) {
+        err.statusCode = 500
+      }
+      next(err)
+    })
 }

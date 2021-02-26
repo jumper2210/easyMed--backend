@@ -1,8 +1,8 @@
-const mongoose = require("mongoose");
+const mongoose = require('mongoose')
 
-const Schema = mongoose.Schema;
+const Schema = mongoose.Schema
 
-const userSchema = new Schema(
+const patientSchema = new Schema(
   {
     email: {
       type: String,
@@ -19,25 +19,25 @@ const userSchema = new Schema(
     chatMates: [
       {
         type: Schema.Types.ObjectId,
-        ref: "User",
+        ref: 'User',
       },
     ],
     medicalCases: [
       {
         type: Schema.Types.ObjectId,
-        ref: "MedicalCase",
+        ref: 'MedicalCase',
       },
     ],
     conversations: [
       {
         type: Schema.Types.ObjectId,
-        ref: "Conversation",
+        ref: 'Conversation',
       },
     ],
     medicines: [
       {
         type: Schema.Types.ObjectId,
-        ref: "Medicine",
+        ref: 'Medicine',
       },
     ],
     avatar: {
@@ -48,11 +48,18 @@ const userSchema = new Schema(
     },
     role: {
       type: String,
-      default: "PATIENT",
-      required: true,
+      default: 'PATIENT',
+    },
+    clinics: {
+      type: Schema.Types.ObjectId,
+      ref: 'Clinic',
+    },
+    isAssignClinic: {
+      type: Boolean,
+      default: false,
     },
   },
   { timestamps: true }
-);
+)
 
-module.exports = mongoose.model("User", userSchema);
+module.exports = mongoose.model('Patient', patientSchema)

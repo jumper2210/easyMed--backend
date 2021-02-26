@@ -1,7 +1,7 @@
-const mongoose = require("mongoose");
-const Schema = mongoose.Schema;
+const mongoose = require('mongoose')
+const Schema = mongoose.Schema
 
-const postSchema = new Schema(
+const clinicSchema = new Schema(
   {
     title: {
       type: String,
@@ -23,8 +23,20 @@ const postSchema = new Schema(
       type: String,
       required: true,
     },
+    patients: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: 'Patient',
+      },
+    ],
+    doctors: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: 'Doctor',
+      },
+    ],
   },
   { timestamps: true }
-);
+)
 
-module.exports = mongoose.model("Clinic", postSchema);
+module.exports = mongoose.model('Clinic', clinicSchema)

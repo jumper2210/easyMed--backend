@@ -1,15 +1,27 @@
-const express = require("express")
-const adminController = require("../controllers/admin")
-const isAuth = require("../middleware/is-auth")
-const { authRole } = require("../helpers/_authRole")
-const { ROLES } = require("../helpers/_roles")
+const express = require('express')
+const { body } = require('express-validator')
+const adminController = require('../controllers/admin')
 const router = express.Router()
+const Doctor = require('../models/doctor')
 
-router.put(
-  "/setDoctorRole/:userId",
-  isAuth,
-  authRole(ROLES.ADMIN),
-  adminController.setDoctorRole
+router.post(
+  '/assignDoctor',
+  [
+    body('email')
+      .isEmail()
+      .withMessage('Please enter a valid email.')
+      .custom((value, { req }) => {
+        return Doctor.findOne({ email: value }).then((doctorDoc) => {
+          if (doctorDoc) {
+            return Promise.reject('Email address already exists!')
+          }
+        })
+      })
+      .normalizeEmail(),
+    body('password').trim().isLength({ min: 5 }),
+    body('name').trim().not().isEmpty(),
+  ],
+  adminController.assignDoctor
 )
 
 module.exports = router

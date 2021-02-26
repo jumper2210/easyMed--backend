@@ -1,12 +1,12 @@
-const MedicalCase = require("../models/medicalCase")
-const { validationResult } = require("express-validator")
-const User = require("../models/user.js")
+const MedicalCase = require('../models/medicalCase')
+const { validationResult } = require('express-validator')
+const User = require('../models/user.js')
 
 exports.createMedicalCase = (req, res, next) => {
   const errors = validationResult(req)
 
   if (!errors.isEmpty()) {
-    const error = new Error("Validation failed")
+    const error = new Error('Validation failed')
     error.statusCode = 422
     error.data = errors.array()
     throw error
@@ -46,7 +46,7 @@ exports.createMedicalCase = (req, res, next) => {
     })
     .then((result) => {
       res.status(201).json({
-        message: "medicalCase created successfully!",
+        message: 'medicalCase created successfully!',
         medicalCase: medicalCase,
         creator: { _id: creator._id, name: creator.name },
       })
@@ -63,7 +63,7 @@ exports.createMedicalCase = (req, res, next) => {
 exports.getPatientMedicalCases = async (req, res, next) => {
   const patientId = req.params.patientId
   await User.findOne({ _id: patientId })
-    .populate("medicalCases")
+    .populate('medicalCases')
     .then((user) => {
       if (user) {
         const medicalCases = user.medicalCases
@@ -82,11 +82,11 @@ exports.checkPatientMedicalCase = async (req, res, next) => {
   const medicalCaseId = req.params.medicalCaseId
   await MedicalCase.findOne({ _id: medicalCaseId })
     .then((medicalCase) => {
-      console.log("check")
+      console.log('check')
       if (medicalCase) {
         medicalCase.resolved = true
         medicalCase.save()
-        res.status(200).json({ message: "medical case checked!", medicalCase })
+        res.status(200).json({ medicalCase })
       }
     })
     .catch((err) => {

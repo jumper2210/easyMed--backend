@@ -1,6 +1,6 @@
-const mongoose = require("mongoose");
+const mongoose = require('mongoose')
 
-const Schema = mongoose.Schema;
+const Schema = mongoose.Schema
 
 const medicineSchema = new Schema({
   name: {
@@ -17,9 +17,9 @@ const medicineSchema = new Schema({
   },
   creator: {
     type: Schema.Types.ObjectId,
-    ref: "User",
+    ref: 'Patient',
     required: true,
   },
-});
+})
 
-module.exports = mongoose.model("Medicine", medicineSchema);
+module.exports = mongoose.model('Medicine', medicineSchema)
