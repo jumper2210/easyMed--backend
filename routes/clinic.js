@@ -14,6 +14,6 @@ router.post(
   clinicController.createClinic
 )
 
-router.put('/assignClinic', isAuth, clinicController.assignClinic)
+router.put('/assignClinic/:patientId', isAuth, clinicController.assignClinic)
 
 module.exports = router

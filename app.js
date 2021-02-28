@@ -5,7 +5,7 @@ const clinicRoutes = require('./routes/clinic')
 const authRoutes = require('./routes/auth')
 const medicalCaseRoutes = require('./routes/medicalCase')
 const conversationRoutes = require('./routes/conversation')
-const chatMatesRoutes = require('./routes/chatMates')
+// const chatMatesRoutes = require('./routes/chatMates')
 const messageRoutes = require('./routes/message')
 const handlers = require('./messagesHandlers/createMessage')
 const userRoutes = require('./routes/user')
@@ -43,7 +43,7 @@ app.use('/conversation', conversationRoutes)
 
 app.use('/message', messageRoutes)
 
-app.use('/chatMates', chatMatesRoutes)
+// app.use('/chatMates', chatMatesRoutes)
 
 app.use('/user', userRoutes)
 

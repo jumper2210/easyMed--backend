@@ -1,6 +1,6 @@
 const MedicalCase = require('../models/medicalCase')
 const { validationResult } = require('express-validator')
-const User = require('../models/user.js')
+const Patient = require('../models/patient.js')
 
 exports.createMedicalCase = (req, res, next) => {
   const errors = validationResult(req)
@@ -37,12 +37,12 @@ exports.createMedicalCase = (req, res, next) => {
   medicalCase
     .save()
     .then((result) => {
-      return User.findById(req.userId)
+      return Patient.findById(req.userId)
     })
-    .then((user) => {
-      creator = user
+    .then((patient) => {
+      creator = patient
       user.medicalCases.push(medicalCase)
-      return user.save()
+      return patient.save()
     })
     .then((result) => {
       res.status(201).json({
@@ -62,7 +62,7 @@ exports.createMedicalCase = (req, res, next) => {
 
 exports.getPatientMedicalCases = async (req, res, next) => {
   const patientId = req.params.patientId
-  await User.findOne({ _id: patientId })
+  await Patient.findOne({ _id: patientId })
     .populate('medicalCases')
     .then((user) => {
       if (user) {
@@ -82,7 +82,6 @@ exports.checkPatientMedicalCase = async (req, res, next) => {
   const medicalCaseId = req.params.medicalCaseId
   await MedicalCase.findOne({ _id: medicalCaseId })
     .then((medicalCase) => {
-      console.log('check')
       if (medicalCase) {
         medicalCase.resolved = true
         medicalCase.save()

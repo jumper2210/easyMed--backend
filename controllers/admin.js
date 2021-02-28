@@ -3,8 +3,11 @@ const Doctor = require('../models/doctor')
 const bcrypt = require('bcryptjs')
 const jwt = require('jsonwebtoken')
 const ENV = require('../env.js')
+const Clinic = require('../models/clinic')
 
-exports.assignDoctor = (req, res, next) => {
+const expireTime = 3600000
+
+exports.assignDoctorAccount = async (req, res, next) => {
   const errors = validationResult(req)
 
   if (!errors.isEmpty()) {
@@ -14,10 +17,8 @@ exports.assignDoctor = (req, res, next) => {
     throw error
   }
 
-  const email = req.body.email
-  const name = req.body.name
-  const password = req.body.password
-  const specialization = req.body.specialization
+  const { email, name, password, specialization, clinicId } = req.body
+  const clinic = await Clinic.findOne({ _id: clinicId })
 
   bcrypt
     .hash(password, 12)
@@ -27,11 +28,15 @@ exports.assignDoctor = (req, res, next) => {
         password: hashedPw,
         name: name,
         specialization: specialization,
+        isAssignClinic: true,
+        clinics: clinic,
       })
       return doctor.save()
     })
 
     .then((result) => {
+      clinic.doctors.push(result)
+      clinic.save()
       const token = jwt.sign(
         {
           email: result.email,
@@ -40,13 +45,13 @@ exports.assignDoctor = (req, res, next) => {
           isAssignClinic: true,
         },
         ENV.keys.tokenSecret,
-        { expiresIn: expireTime }
+        { expiresIn: '1h' }
       )
 
       res.status(201).json({
         userId: result._id,
         token: token,
-        expireTime: expireTime,
+        expireTime,
         role: result.role,
         isAssignClinic: true,
       })

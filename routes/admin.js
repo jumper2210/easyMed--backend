@@ -21,7 +21,7 @@ router.post(
     body('password').trim().isLength({ min: 5 }),
     body('name').trim().not().isEmpty(),
   ],
-  adminController.assignDoctor
+  adminController.assignDoctorAccount
 )
 
 module.exports = router
