@@ -6,6 +6,8 @@ const authRoutes = require('./routes/auth')
 const medicalCaseRoutes = require('./routes/medicalCase')
 const conversationRoutes = require('./routes/conversation')
 // const chatMatesRoutes = require('./routes/chatMates')
+const patientRoutes = require('./routes/patient')
+const doctorRoutes = require('./routes/doctor')
 const messageRoutes = require('./routes/message')
 const handlers = require('./messagesHandlers/createMessage')
 const userRoutes = require('./routes/user')
@@ -52,6 +54,10 @@ app.use('/medicine', medicineRoute)
 app.use('/pushNotifications', pushNotificationsRoutes)
 
 app.use('/admin', adminRoutes)
+
+app.use('/patient', patientRoutes)
+
+app.use('/doctor', doctorRoutes)
 
 app.use((error, req, res, next) => {
   console.log(error)
