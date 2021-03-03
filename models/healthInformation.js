@@ -1,8 +1,8 @@
-const mongoose = require('mongoose')
+const mongoose = require('mongoose');
 
-const Schema = mongoose.Schema
+const Schema = mongoose.Schema;
 
-const medicalCaseSchema = new Schema(
+const healthInformationSchema = new Schema(
   {
     pickedSymptom: {
       type: String,
@@ -46,6 +46,6 @@ const medicalCaseSchema = new Schema(
   },
 
   { timestamps: true }
-)
+);
 
-module.exports = mongoose.model('MedicalCase', medicalCaseSchema)
+module.exports = mongoose.model('HealthInformation', healthInformationSchema);

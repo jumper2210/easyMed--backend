@@ -1,6 +1,6 @@
-const mongoose = require('mongoose')
+const mongoose = require('mongoose');
 
-const Schema = mongoose.Schema
+const Schema = mongoose.Schema;
 
 const patientSchema = new Schema(
   {
@@ -22,10 +22,10 @@ const patientSchema = new Schema(
         ref: 'User',
       },
     ],
-    medicalCases: [
+    healthInformations: [
       {
         type: Schema.Types.ObjectId,
-        ref: 'MedicalCase',
+        ref: 'HealthInformation',
       },
     ],
     conversations: [
@@ -38,6 +38,12 @@ const patientSchema = new Schema(
       {
         type: Schema.Types.ObjectId,
         ref: 'Medicine',
+      },
+    ],
+    chatMates: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: 'User',
       },
     ],
     avatar: {
@@ -62,7 +68,8 @@ const patientSchema = new Schema(
       default: false,
     },
   },
-  { timestamps: true }
-)
 
-module.exports = mongoose.model('Patient', patientSchema)
+  { timestamps: true }
+);
+
+module.exports = mongoose.model('Patient', patientSchema);

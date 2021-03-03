@@ -1,24 +1,23 @@
-const { validationResult } = require('express-validator')
-const Doctor = require('../models/doctor')
-const bcrypt = require('bcryptjs')
-const jwt = require('jsonwebtoken')
-const ENV = require('../env.js')
-const Clinic = require('../models/clinic')
-
-const expireTime = 3600000
+const { validationResult } = require('express-validator');
+const Doctor = require('../models/doctor');
+const bcrypt = require('bcryptjs');
+const jwt = require('jsonwebtoken');
+const ENV = require('../env.js');
+const Clinic = require('../models/clinic');
 
 exports.assignDoctorAccount = async (req, res, next) => {
-  const errors = validationResult(req)
+  const errors = validationResult(req);
+  const expireTime = 3600000;
 
   if (!errors.isEmpty()) {
-    const error = new Error('Validation failed')
-    error.statusCode = 422
-    error.data = errors.array()
-    throw error
+    const error = new Error('Validation failed');
+    error.statusCode = 422;
+    error.data = errors.array();
+    throw error;
   }
 
-  const { email, name, password, specialization, clinicId } = req.body
-  const clinic = await Clinic.findOne({ _id: clinicId })
+  const { email, name, password, specialization, clinicId } = req.body;
+  const clinic = await Clinic.findOne({ _id: clinicId });
 
   bcrypt
     .hash(password, 12)
@@ -30,13 +29,13 @@ exports.assignDoctorAccount = async (req, res, next) => {
         specialization: specialization,
         isAssignClinic: true,
         clinics: clinic,
-      })
-      return doctor.save()
+      });
+      return doctor.save();
     })
 
     .then((result) => {
-      clinic.doctors.push(result)
-      clinic.save()
+      clinic.doctors.push(result);
+      clinic.save();
       const token = jwt.sign(
         {
           email: result.email,
@@ -46,7 +45,7 @@ exports.assignDoctorAccount = async (req, res, next) => {
         },
         ENV.keys.tokenSecret,
         { expiresIn: '1h' }
-      )
+      );
 
       res.status(201).json({
         userId: result._id,
@@ -54,12 +53,12 @@ exports.assignDoctorAccount = async (req, res, next) => {
         expireTime,
         role: result.role,
         isAssignClinic: true,
-      })
+      });
     })
     .catch((err) => {
       if (!err.statusCode) {
-        err.statusCode = 500
+        err.statusCode = 500;
       }
-      next(err)
-    })
-}
+      next(err);
+    });
+};

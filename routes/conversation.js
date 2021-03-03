@@ -1,16 +1,26 @@
-const express = require("express");
-const conversationController = require("../controllers/conversation");
+const express = require('express');
+const conversationController = require('../controllers/conversation');
 const router = express.Router();
-const isAuth = require("../middleware/is-auth");
+const isAuth = require('../middleware/is-auth');
 
 router.post(
-  "/createConversation",
+  '/createConversationWithDoctor',
   isAuth,
-  conversationController.createConversation
+  conversationController.createConversationWithDoctor
 );
 router.get(
-  "/getConversations",
+  '/getConversationsWithDoctors',
   isAuth,
-  conversationController.loadConversations
+  conversationController.loadConversationsWithDoctors
+);
+router.post(
+  '/createConversationWithPatient',
+  isAuth,
+  conversationController.createConversationWithPatient
+);
+router.get(
+  '/getConversationsWithPatients',
+  isAuth,
+  conversationController.loadConversationsWithPatients
 );
 module.exports = router;
