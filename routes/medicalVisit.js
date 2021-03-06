@@ -11,4 +11,10 @@ router.post(
 
 router.get('/getMedicalVisit', isAuth, medicalVisitController.getMedicalVisit);
 
+router.get(
+  '/checkOfDeadlines/:doctorId/:dateString',
+  isAuth,
+  medicalVisitController.checkOfDeadlines
+);
+
 module.exports = router;

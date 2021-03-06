@@ -7,16 +7,19 @@ const medicalVisitSchema = new Schema(
       type: String,
       required: true,
     },
-    medicalVisitDoctor: {
-      type: Schema.Types.ObjectId,
-      ref: 'Doctor',
+    hour: {
+      type: String,
+      required: true,
     },
-    medicalVisitPatient: {
+    patient: {
       type: Schema.Types.ObjectId,
       ref: 'Patient',
     },
+    doctor: {
+      type: Schema.Types.ObjectId,
+      ref: 'Doctor',
+    },
   },
-
   { timestamps: true }
 );
 

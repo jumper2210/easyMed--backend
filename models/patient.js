@@ -62,15 +62,16 @@ const patientSchema = new Schema(
         ref: 'Clinic',
       },
     ],
-
     isAssignClinic: {
       type: Boolean,
       default: false,
     },
-    medicalVisits: {
-      type: Schema.Types.ObjectId,
-      ref: 'MedicalVisit',
-    },
+    medicalVisits: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: 'MedicalVisit',
+      },
+    ],
   },
 
   { timestamps: true }

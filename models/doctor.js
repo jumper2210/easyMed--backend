@@ -19,12 +19,6 @@ const doctorSchema = new Schema(
       type: String,
       required: true,
     },
-    chatMates: [
-      {
-        type: Schema.Types.ObjectId,
-        ref: 'User',
-      },
-    ],
     conversations: [
       {
         type: Schema.Types.ObjectId,
@@ -58,10 +52,12 @@ const doctorSchema = new Schema(
       type: Boolean,
       default: false,
     },
-    medicalVisits: {
-      type: Schema.Types.ObjectId,
-      ref: 'MedicalVisit',
-    },
+    medicalVisits: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: 'MedicalVisit',
+      },
+    ],
   },
   { timestamps: true }
 );
