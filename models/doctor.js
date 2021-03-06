@@ -58,6 +58,10 @@ const doctorSchema = new Schema(
       type: Boolean,
       default: false,
     },
+    medicalVisits: {
+      type: Schema.Types.ObjectId,
+      ref: 'MedicalVisit',
+    },
   },
   { timestamps: true }
 );

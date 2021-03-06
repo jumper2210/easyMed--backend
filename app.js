@@ -14,6 +14,7 @@ const userRoutes = require('./routes/user');
 const medicineRoute = require('./routes/medicine');
 const pushNotificationsRoutes = require('./routes/pushNotifications');
 const adminRoutes = require('./routes/admin');
+const medicalVisitRoutes = require('./routes/medicalVisit');
 
 const ENV = require('./env.js');
 const PORT = 8080;
@@ -34,6 +35,8 @@ app.use((req, res, next) => {
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
   next();
 });
+
+app.use('/medicalVisit', medicalVisitRoutes);
 
 app.use('/clinic', clinicRoutes);
 
