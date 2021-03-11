@@ -51,7 +51,7 @@ exports.editUser = async (req, res, next) => {
     user.name = name;
     user.avatar = avatar;
     user.phoneNumber = phoneNumber;
-    user.password = password;
+    // user.password = password;
 
     // bcrypt.hash(password, 12).then((hashedPw) => {
     //   const doctor = new Doctor({

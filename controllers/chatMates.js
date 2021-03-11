@@ -6,6 +6,7 @@ exports.getChatMates = async (req, res, next) => {
     (await Doctor.findOne({ _id: req.userId }))
       .populate('chatMates', 'name')
       .then((userRes) => {
+        console.log(userRes);
         if (userRes) {
           const chatMates = userRes.chatMates;
           res.status(200).json({ chatMates });

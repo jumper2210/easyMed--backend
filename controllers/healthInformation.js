@@ -66,7 +66,7 @@ exports.getHealthInformation = async (req, res, next) => {
     .populate('healthInformations')
     .then((patient) => {
       if (patient) {
-        const healthInformations = patient.healthInformation;
+        const healthInformations = patient.healthInformations;
         res.status(200).json({ healthInformations });
       }
     })

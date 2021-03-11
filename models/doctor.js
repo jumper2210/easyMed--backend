@@ -34,7 +34,7 @@ const doctorSchema = new Schema(
     chatMates: [
       {
         type: Schema.Types.ObjectId,
-        ref: 'Doctor',
+        ref: 'Patient',
       },
     ],
     role: {

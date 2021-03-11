@@ -1,7 +1,6 @@
 const MedicalVisit = require('../models/medicalVisit');
 const Doctor = require('../models/doctor');
 const Patient = require('../models/patient');
-const medicalVisit = require('../models/medicalVisit');
 
 exports.createMedicalVisit = async (req, res, next) => {
   const { day, doctorId, hour } = req.body;
@@ -45,6 +44,17 @@ exports.checkOfDeadlines = async (req, res, next) => {
       errors.statusCode = 404;
       throw new Error('doctor with this id not be found');
     }
+    if (doctor.medicalVisits.length > 0) {
+      doctor.medicalVisits.map((mv) => {
+        if (mv.date == dateString) {
+          deadlines.push(mv.hour);
+        }
+        res.status(200).json({
+          deadlines,
+        });
+      });
+    }
+
     if (doctor.medicalVisits.length === 0) {
       res.status(200).json({
         deadlines,

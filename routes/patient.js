@@ -9,4 +9,10 @@ router.get(
   patientController.getClinicPatients
 );
 
+router.get(
+  '/getPatientMedicalVisits',
+  isAuth,
+  patientController.getPatientMedicalVisits
+);
+
 module.exports = router;

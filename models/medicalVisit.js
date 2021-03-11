@@ -12,12 +12,10 @@ const medicalVisitSchema = new Schema(
       required: true,
     },
     patient: {
-      type: Schema.Types.ObjectId,
-      ref: 'Patient',
+      type: Object,
     },
     doctor: {
-      type: Schema.Types.ObjectId,
-      ref: 'Doctor',
+      type: Object,
     },
   },
   { timestamps: true }

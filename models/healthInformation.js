@@ -4,10 +4,7 @@ const Schema = mongoose.Schema;
 
 const healthInformationSchema = new Schema(
   {
-    pickedSymptom: {
-      type: String,
-    },
-    otherSymptom: {
+    symptom: {
       type: String,
     },
     age: {
@@ -18,13 +15,13 @@ const healthInformationSchema = new Schema(
       type: String,
       required: true,
     },
-    increase: {
-      type: String,
-      required: true,
-    },
-    escalation: {
-      type: String,
-    },
+    // increase: {
+    //   type: String,
+    //   required: true,
+    // },
+    // escalation: {
+    //   type: String,
+    // },
     locationOfPain: {
       type: String,
     },
