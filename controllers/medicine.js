@@ -24,11 +24,11 @@ exports.assignMedicine = async (req, res, next) => {
   });
   try {
     const patient = await Patient.findById(patientId);
-    const Medicine = await medicine.save();
-    patient.medicines.push(Medicine);
+    patient.medicines.push(medicine);
     patient.save();
+    await medicine.save();
     const doctor = await Doctor.findById(creator);
-
+    console.log(medicine, doctor);
     res.status(201).json({
       medicine: medicine,
       assignBy: doctor,

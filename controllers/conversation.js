@@ -17,7 +17,6 @@ exports.createConversationWithDoctor = async (req, res, next) => {
           console.log('You already have conversation with this user');
         } else {
           Doctor.findById(req.body.chatMateId).then((chatMate) => {
-            console.log(chatMate, 'chatmate');
             const newConversation = new Conversation({
               userOneId: user._id,
               userTwoId: chatMate._id,

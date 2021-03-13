@@ -20,6 +20,7 @@ exports.getDoctorMedicalVisits = async (req, res, next) => {
   await Doctor.findById(userId)
     .populate('medicalVisits')
     .then((result) => {
+      console.log(result);
       res.status(200).json({ doctorMedicalVisits: result.medicalVisits });
     })
     .catch((err) => {

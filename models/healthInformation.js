@@ -15,13 +15,10 @@ const healthInformationSchema = new Schema(
       type: String,
       required: true,
     },
-    // increase: {
-    //   type: String,
-    //   required: true,
-    // },
-    // escalation: {
-    //   type: String,
-    // },
+    increase: {
+      type: String,
+      required: true,
+    },
     locationOfPain: {
       type: String,
     },

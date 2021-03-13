@@ -14,8 +14,7 @@ exports.createHealthInformation = (req, res, next) => {
 
   let creator;
 
-  const pickedSymptom = req.body.pickedSymptom;
-  const otherSymptom = req.body.otherSymptom;
+  const symptom = req.body.symptom;
   const age = req.body.age;
   const scale = req.body.scale;
   const increase = req.body.increase;
@@ -24,8 +23,7 @@ exports.createHealthInformation = (req, res, next) => {
   const imageUri = req.body.imageUri;
 
   const healthInformation = new HealthInformation({
-    pickedSymptom: pickedSymptom,
-    otherSymptom: otherSymptom,
+    symptom: symptom,
     age: age,
     scale: scale,
     increase: increase,

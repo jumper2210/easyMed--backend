@@ -2,54 +2,84 @@ const Patient = require('../models/patient');
 const Doctor = require('../models/doctor');
 
 exports.getChatMates = async (req, res, next) => {
-  (await Patient.findOne({ _id: req.userId })) ||
-    (await Doctor.findOne({ _id: req.userId }))
-      .populate('chatMates', 'name')
-      .then((userRes) => {
-        console.log(userRes);
-        if (userRes) {
-          const chatMates = userRes.chatMates;
-          res.status(200).json({ chatMates });
-        }
-      })
-      .catch((err) => {
-        if (!err.statusCode) {
-          err.statusCode = 500;
-        }
-        next(err);
-      });
+  let chatMates;
+  try {
+    const patient = await Patient.findOne({ _id: req.userId }).populate(
+      'chatMates'
+    );
+    const doctor = await Doctor.findOne({ _id: req.userId }).populate(
+      'chatMates'
+    );
+    if (doctor) {
+      chatMates = doctor.chatMates;
+      res.status(200).json({ chatMates });
+    } else if (patient) {
+      chatMates = patient.chatMates;
+      res.status(200).json({ chatMates });
+    }
+  } catch (err) {
+    if (!err.statusCode) {
+      err.statusCode = 500;
+    }
+    next(err);
+  }
 };
-exports.addChatMate = async (req, res, next) => {
-  const ownEmail = req.body.ownEmail;
-  const chatMateEmail = req.body.chatMateEmail;
-  if (ownEmail !== chatMateEmail) {
-    (await Patient.findOne({ email: ownEmail })) ||
-      (await Doctor.findOne({ email: ownEmail })).then((userRes) => {
-        if (userRes) {
-          User.findOne({ email: chatMateEmail }).then((chatMate) => {
-            if (chatMate) {
-              const stringId = `${chatMate._id}`;
-              const chatMateExists =
-                user.chatMates.filter((d) => `${d}` === stringId).length > 0;
-              if (!chatMateExists) {
-                userRes.chatMates.push(chatMate);
-                userRes.save();
+exports.addChatMateForPatient = async (req, res, next) => {
+  const { chatMateEmail, ownEmail } = req.body;
+  try {
+    const doctor = await Doctor.findOne({ email: chatMateEmail });
+    await Patient.findOne({ email: ownEmail }).then((patient) => {
+      if (patient) {
+        const doctorId = `${doctor._id}`;
 
-                res.status(201).json({
-                  chatMate: { name: chatMate.name, _id: chatMate._id },
-                });
-              } else {
-                console.log('You have added already this chat mate');
-              }
-            } else {
-              console.log(`chat mate ${req.body.chatMateEmail} doesn't exist`);
-            }
+        const chatMateExists =
+          patient.chatMates.filter((c) => `${c}` === doctorId).length > 0;
+
+        if (!chatMateExists) {
+          patient.chatMates.push(doctor);
+          patient.save();
+          res.status(201).json({
+            chatMate: { name: doctor.name, _id: doctor._id },
           });
         } else {
-          console.log('Cannot find user');
+          console.log('You have added already this chat mate');
         }
-      });
-  } else {
-    console.log('Cannot add yourself as a chat mate');
+      }
+    });
+  } catch (err) {
+    if (!err.statusCode) {
+      err.statusCode = 500;
+    }
+    next(err);
+  }
+};
+
+exports.addChatMateForDoctor = async (req, res, next) => {
+  const { chatMateEmail, ownEmail } = req.body;
+  try {
+    const patient = await Patient.findOne({ email: chatMateEmail });
+    await Doctor.findOne({ email: ownEmail }).then((doctor) => {
+      if (patient) {
+        const patientId = `${patient._id}`;
+
+        const chatMateExists =
+          doctor.chatMates.filter((c) => `${c}` === patientId).length > 0;
+
+        if (!chatMateExists) {
+          doctor.chatMates.push(patient);
+          doctor.save();
+          res.status(201).json({
+            chatMate: { name: patient.name, _id: patient._id },
+          });
+        } else {
+          console.log('You have added already this chat mate');
+        }
+      }
+    });
+  } catch (err) {
+    if (!err.statusCode) {
+      err.statusCode = 500;
+    }
+    next(err);
   }
 };
