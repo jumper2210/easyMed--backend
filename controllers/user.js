@@ -37,7 +37,7 @@ exports.editUser = async (req, res, next) => {
   const name = req.body.name;
   const avatar = req.body.selectedImage;
   const phoneNumber = req.body.phoneNumber;
-  // const password = req.body.password
+
   try {
     const user =
       (await Patient.findOne({ _id: userId })) ||
@@ -51,14 +51,6 @@ exports.editUser = async (req, res, next) => {
     user.name = name;
     user.avatar = avatar;
     user.phoneNumber = phoneNumber;
-    // user.password = password;
-
-    // bcrypt.hash(password, 12).then((hashedPw) => {
-    //   const doctor = new Doctor({
-    //     password: hashedPw,
-    //   })
-    //   return doctor.save()
-    // })
 
     res.status(200).json({
       user: user,

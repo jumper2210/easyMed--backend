@@ -15,4 +15,6 @@ router.get(
   doctorController.getDoctorMedicalVisits
 );
 
+router.put('/editPassword', isAuth, doctorController.editPassword);
+
 module.exports = router;
