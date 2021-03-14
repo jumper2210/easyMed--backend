@@ -31,8 +31,6 @@ exports.createMedicalVisit = async (req, res, next) => {
   }
 };
 
-exports.getMedicalVisit = async (req, res, next) => {};
-
 exports.checkOfDeadlines = async (req, res, next) => {
   const { doctorId, dateString } = req.params;
   let deadlines = [];
@@ -61,4 +59,53 @@ exports.checkOfDeadlines = async (req, res, next) => {
       });
     }
   } catch (err) {}
+};
+exports.deletePatientMedicalVisit = (req, res, next) => {
+  const { medicalVisitId, doctorId } = req.params;
+  MedicalVisit.findByIdAndRemove(medicalVisitId)
+    .then(() => {
+      return Patient.findById(req.userId);
+    })
+    .then((patient) => {
+      patient.medicalVisits.pull(medicalVisitId);
+      return patient.save();
+    })
+    .then(() => {
+      return Doctor.findById(doctorId);
+    })
+    .then((doctor) => {
+      doctor.medicalVisits.pull(medicalVisitId);
+      return doctor.save();
+    })
+    .then(() => {
+      res.status(202).json({ message: 'Sukces!' });
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+};
+
+exports.deleteDoctorMedicalVisit = (req, res, next) => {
+  const { medicalVisitId, patientId } = req.params;
+  MedicalVisit.findByIdAndRemove(medicalVisitId)
+    .then(() => {
+      return Doctor.findById(req.userId);
+    })
+    .then((doctor) => {
+      doctor.medicalVisits.pull(medicalVisitId);
+      return doctor.save();
+    })
+    .then(() => {
+      return Patient.findById(patientId);
+    })
+    .then((patient) => {
+      patient.medicalVisits.pull(medicalVisitId);
+      return patient.save();
+    })
+    .then(() => {
+      res.status(202).json({ message: 'Sukces!' });
+    })
+    .catch((err) => {
+      console.log(err);
+    });
 };

@@ -9,12 +9,19 @@ router.post(
   medicalVisitController.createMedicalVisit
 );
 
-router.get('/getMedicalVisit', isAuth, medicalVisitController.getMedicalVisit);
-
 router.get(
   '/checkOfDeadlines/:doctorId/:dateString',
   isAuth,
   medicalVisitController.checkOfDeadlines
 );
-
+router.delete(
+  '/deletePatientMedicalVisit/:medicalVisitId/:doctorId',
+  isAuth,
+  medicalVisitController.deletePatientMedicalVisit
+);
+router.delete(
+  '/deleteDoctorMedicalVisit/:medicalVisitId/:patientId',
+  isAuth,
+  medicalVisitController.deleteDoctorMedicalVisit
+);
 module.exports = router;
